@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Products } from '../data'
-import { Button, Typography } from '@mui/material'
+import { Alert, AlertTitle, Button, Typography } from '@mui/material'
 import {storage, db} from '../config/firebase'
 import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage'
 import { collection, doc, getDocs, updateDoc } from 'firebase/firestore'
+import { BsFillCartCheckFill } from "react-icons/bs";
+
+
 
 const Menu = () => {
     const [menu, setMenu] = useState([]);
+    const [alert, setAlert] = useState(false)
+    const [showCart, setShowCart] = useState(false)
 // BUNU DEĞİŞTİR
 
     useEffect(() => {
@@ -46,7 +51,7 @@ const Menu = () => {
     //     getMenu()
     // }, [])
 
-    // const increaseOrder = async (id) => {
+     const increaseOrder = async (id) => {
     //    console.log(id)
     //    const filtered = menu.filter(item => item.id == id);
     //    console.log(filtered[0].title)
@@ -56,22 +61,29 @@ const Menu = () => {
     //    await updateDoc(doc(db, 'menu-items',id), {
     //     times:updatedTimes
     //    })
-    // }
+        setAlert(true)
+        setShowCart(true)
+        const time = setTimeout(()=>{
+            setAlert(false)
+        },3000)
+    
+    }
 
     const handlePizza = () => {
-        const selectPizza = menu.filter((item) => item.category==='pizza')
+        const selectPizza = Products.filter((item) => item.category==='pizza')
         setMenu(selectPizza);
     }
     const handleDrinks = () => {
-        const selectDrink = menu.filter((item) => item.category==='drink')
+        const selectDrink = Products.filter((item) => item.category==='drink')
         setMenu(selectDrink);
     }
     const handleDesserts = () => {
-        const selectDessert = menu.filter((item) => item.category==='dessert')
+        const selectDessert = Products.filter((item) => item.category==='dessert')
         setMenu(selectDessert)
     }
     const handleBurger = () => {
-        const selectBurger = menu.filter((item) => item.category==='burger')
+
+        const selectBurger = Products.filter((item) => item.category==='burger')
         setMenu(selectBurger)
     }
     const handleAll = () => {
@@ -86,12 +98,21 @@ const Menu = () => {
   return (
     <div className='container mx-auto'>
         {/*Category Selection*/}
-        <div className= 'flex justify-between mt-5 gap-x-3 px-16 py-6'>
+        {alert&&<Alert severity="success">
+        <AlertTitle>Success</AlertTitle>
+        Added to Cart
+        </Alert>}
+        <div className= 'flex justify-between mt-5 gap-x-3 px-16 lg:px-72 py-6'>
         <Button variant='contained' color='warning' onClick={handleAll}>All</Button>
         <Button variant='contained' onClick={handlePizza} color='warning'>Pizza</Button>
         <Button variant='contained' color='warning' onClick={handleBurger}>Burger</Button>
         <Button variant='contained' color='warning' onClick={handleDrinks}>Drinks</Button>
         <Button variant='contained' color='warning' onClick={handleDesserts}>Desserts</Button>
+        {showCart&& <a href="/cart"><BsFillCartCheckFill size={40} color='green'/></a> }
+        </div>
+        <div className='w-full'>
+            <button  className='bg-black rounded-md py-3 px-6 text-white font-mono float-right'><a href="/Auth">Log In</a>
+            </button>
         </div>
          {/*Category Selection*/}
 
@@ -100,8 +121,8 @@ const Menu = () => {
             {menu.map(({uuid, title, desc, price, options, img, times, id })=> (
             <div key={id} className='
               
-              mx-auto block gap-x-6  bg-emerald-800 mt-3'>
-                <div className='flex justify-center items-center bg-slate-300 w-64 h-80 bg-cover bg-center ' style={{ backgroundImage: `url(${img})` }}>
+              mx-auto block gap-x-6  bg-emerald-800 mt-3 w-80'>
+                <div className='flex justify-center items-center bg-slate-300 w-80 h-80 bg-cover  bg-center max-w-80 max-h-80 ' style={{ backgroundImage: `url(${img})` }}>
                     {/* <img className='w-auto h-auto max-w-[200px]  max-h-[400px] p-4' src={img}  /> */}
                     
                 </div>
@@ -111,9 +132,9 @@ const Menu = () => {
                 <div className='w-full flex justify-center py-2'>
                     <Typography variant='h5' className='flex justify-center text-9xl font-bold text-white bg-emerald-500 rounded-xl p-4 w-32'>{price} $</Typography>
                 </div>
-                <div className='flex flex-row p-4 justify-center items-center border-t-2 border-gray-400'>
-                    <Typography className='text-stone-200 ' variant='body1'> {times} Times Ordered*</Typography>
-                    {options&&<div className='flex gap-2'>
+                <div className='flex flex-row p-4 justify-around items-center border-t-2 border-gray-400'>
+                    <Typography className='text-stone-200  px-2' variant='body1'> {times} Times Ordered*</Typography>
+                    {options&&<div className='flex gap-2 pr-2'>
                         <select className='w-32' name="" id="">
                         <option value="">{options[0]?.title} - {options[0]?.additionalPrice} $
                         </option>
