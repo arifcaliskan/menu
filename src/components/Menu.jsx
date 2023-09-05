@@ -98,10 +98,6 @@ const Menu = () => {
   return (
     <div className='container mx-auto'>
         {/*Category Selection*/}
-        {alert&&<Alert severity="success">
-        <AlertTitle>Success</AlertTitle>
-        Added to Cart
-        </Alert>}
         <div className= 'flex justify-between mt-5 gap-x-3 px-16 lg:px-72 py-6'>
         <Button variant='contained' color='warning' onClick={handleAll}>All</Button>
         <Button variant='contained' onClick={handlePizza} color='warning'>Pizza</Button>
@@ -110,6 +106,10 @@ const Menu = () => {
         <Button variant='contained' color='warning' onClick={handleDesserts}>Desserts</Button>
         {showCart&& <a href="/cart"><BsFillCartCheckFill size={40} color='green'/></a> }
         </div>
+        {alert&&<Alert severity="success">
+        <AlertTitle>Success</AlertTitle>
+        Added to Cart
+        </Alert>}
         <div className='w-full'>
             <button  className='bg-black rounded-md py-3 px-6 text-white font-mono float-right'><a href="/Auth">Log In</a>
             </button>
