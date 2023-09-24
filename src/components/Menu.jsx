@@ -13,18 +13,11 @@ const Menu = () => {
     const [alert, setAlert] = useState(false)
     const [showCart, setShowCart] = useState(false)
 // BUNU DEĞİŞTİR
-
-    useEffect(() => {
-        setMenu(Products)
-    },[])
-
-
     // Get Menu from Firebase
     const menuRef = collection(db,'menu-items')
 
     // *** 
-    const imageRef = ref(storage, `images/`)
-    const [images, setImages] = useState([])
+    // const imageRef = ref(storage, `images/`)
 
     // useEffect(()=>{
     //     listAll(imageRef).then((response) => {
@@ -36,69 +29,68 @@ const Menu = () => {
     //     })
     // }, [])
     
-      // ***
-    // const getMenu = async () => {
-    //     try {
-    //         const data = await getDocs(menuRef)
-    //         const filteredData=data.docs.map((doc) =>({...doc.data(), id:doc.id}))
-    //         setMenu(filteredData)
+      
+    const getMenu = async () => {
+        try {
+            const data = await getDocs(menuRef)
+            let filteredData=data.docs.map((doc) =>({...doc.data(), id:doc.id}))
+            setMenu(filteredData)
 
-    //     } catch (err) {
-    //         console.error(err)
-    //     }
-    // }
-    // useEffect(()=> {
-    //     getMenu()
-    // }, [])
+        } catch (err) {
+            console.error(err)
+        }
+    }
+    useEffect(()=> {
+        getMenu()
+        const MenuGlobal = menu;
+    }, [])
 
-     const increaseOrder = async (id) => {
-    //    console.log(id)
-    //    const filtered = menu.filter(item => item.id == id);
-    //    console.log(filtered[0].title)
-    //    const updatedTimes = filtered[0].times+1
-    //    console.log(filtered[0].times+1)
-    //    console.log(filtered[0].uuid)
-    //    await updateDoc(doc(db, 'menu-items',id), {
-    //     times:updatedTimes
-    //    })
+     const increaseOrder = async (uuid) => {
+       console.log(uuid)
+       const filtered = menu.filter(item => item.id == uuid);
+       console.log(filtered[0].title)
+       const updatedTimes = filtered[0].times+1
+       console.log(filtered[0].times+1)
+       console.log(filtered[0].uuid)
+       await updateDoc(doc(db, 'menu-items',uuid), {
+        times:updatedTimes
+       })
         setAlert(true)
         setShowCart(true)
         const time = setTimeout(()=>{
             setAlert(false)
         },3000)
-    
     }
 
     const handlePizza = () => {
         const selectPizza = Products.filter((item) => item.category==='pizza')
-        setMenu(selectPizza);
-    }
+        setMenu(selectPizza)
+        }
     const handleDrinks = () => {
         const selectDrink = Products.filter((item) => item.category==='drink')
-        setMenu(selectDrink);
-    }
+        setMenu(selectDrink)
+        }
     const handleDesserts = () => {
         const selectDessert = Products.filter((item) => item.category==='dessert')
         setMenu(selectDessert)
-    }
+        }
     const handleBurger = () => {
-
         const selectBurger = Products.filter((item) => item.category==='burger')
         setMenu(selectBurger)
-    }
+        }
     const handleAll = () => {
-        // getMenu()
-        setMenu(Products)
+        getMenu()
     }
     const handleOption = (id) => {
         console.log(Products[id].title)
     }
     // getMenu()
+    
 
   return (
     <div className='container mx-auto'>
         {/*Category Selection*/}
-        <div className= 'flex justify-between mt-5 gap-x-3 px-16 lg:px-72 py-6'>
+        <div className= 'flex justify-center items-center sm:gap-x-2 lg:gap-x-3 p-5'>
         <Button variant='contained' color='warning' onClick={handleAll}>All</Button>
         <Button variant='contained' onClick={handlePizza} color='warning'>Pizza</Button>
         <Button variant='contained' color='warning' onClick={handleBurger}>Burger</Button>
@@ -106,14 +98,12 @@ const Menu = () => {
         <Button variant='contained' color='warning' onClick={handleDesserts}>Desserts</Button>
         {showCart&& <a href="/cart"><BsFillCartCheckFill size={40} color='green'/></a> }
         </div>
+
         {alert&&<Alert severity="success">
         <AlertTitle>Success</AlertTitle>
         Added to Cart
         </Alert>}
-        <div className='w-full'>
-            <button  className='bg-black rounded-md py-3 px-6 text-white font-mono float-right'><a href="/Auth">Log In</a>
-            </button>
-        </div>
+       
          {/*Category Selection*/}
 
          {/*Menu Cards*/}
@@ -123,11 +113,10 @@ const Menu = () => {
               
               mx-auto block gap-x-6  bg-emerald-800 mt-3 w-80'>
                 <div className='flex justify-center items-center bg-slate-300 w-80 h-80 bg-cover  bg-center max-w-80 max-h-80 ' style={{ backgroundImage: `url(${img})` }}>
-                    {/* <img className='w-auto h-auto max-w-[200px]  max-h-[400px] p-4' src={img}  /> */}
                     
                 </div>
             
-                <Typography className='bg-red-700 px-2 text-white'  variant='h4'>{title}</Typography>
+                <Typography className='bg-red-700 px-2 text-white flex justify-center'  variant='h4'>{title}</Typography>
                 <Typography className='text-zinc-50 pt-2 px-3 ' variant='body1'>{desc}</Typography>
                 <div className='w-full flex justify-center py-2'>
                     <Typography variant='h5' className='flex justify-center text-9xl font-bold text-white bg-emerald-500 rounded-xl p-4 w-32'>{price} $</Typography>
@@ -147,7 +136,6 @@ const Menu = () => {
                 
             </div>))}
         </div>
-        {images.map(url=> <img src={url}/>)}
         
     </div>
   )
