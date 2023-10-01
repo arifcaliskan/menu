@@ -1,7 +1,13 @@
 import React, { createContext, useState, useEffect } from "react";
 import { storage, db } from "../config/firebase";
-import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  updateDoc,
+  addDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
 const CartContext = createContext({});
 
@@ -11,6 +17,8 @@ export const CartProvider = ({ children }) => {
   const [menu, setMenu] = useState([]);
   const [alert, setAlert] = useState(false);
   const [showCart, setShowCart] = useState(false);
+  const CartRef = collection(db, "cart-items");
+  const [cart, setCart] = useState([]);
   // BUNU DEĞİŞTİR
   // Get Menu from Firebase
   const menuRef = collection(db, "menu-items");
@@ -101,14 +109,49 @@ export const CartProvider = ({ children }) => {
     setMenu(selectBurger);
   };
 
-  const [cart, setCart] = useState([]);
-  const [title, setTitle] = useState("This is the Cart from Context");
+  const addToCart = async (uuid) => {
+    const selected = menu.filter((item) => item.id == uuid);
+    console.log(selected[0].title);
+    await addDoc(CartRef, {
+      uuid: selected[0].uuid,
+      title: selected[0].title,
+      price: selected[0].price,
+      img: selected[0].img,
+      quantity: 1,
+    });
+  };
+  const getCart = async () => {
+    try {
+      const data = await getDocs(CartRef);
+      let Products = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setCart(Products);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const increaseQuantity = async (uuid) => {
+    const selected = cart.filter((item) => item.id == uuid);
+    const updatedQuantity = selected[0].quantity + 1;
+    await updateDoc(doc(db, "cart-items", uuid), {
+      quantity: updatedQuantity,
+    });
+  };
+  const decreaseQuantity = async (uuid) => {
+    const selected = cart.filter((item) => item.id == uuid);
+    if (selected[0].quantity > 1) {
+      const updatedQuantity = selected[0].quantity - 1;
+      await updateDoc(doc(db, "cart-items", uuid), {
+        quantity: updatedQuantity,
+      });
+    }
+  };
+  const deleteItem = async (uuid) => {
+    await deleteDoc(doc(db, "cart-items", uuid));
+  };
 
   return (
     <CartContext.Provider
       value={{
-        title,
-        setTitle,
         cart,
         setCart,
         menu,
@@ -119,6 +162,11 @@ export const CartProvider = ({ children }) => {
         setAlert,
         allProducts,
         setSelectedMenu,
+        getCart,
+        addToCart,
+        increaseQuantity,
+        decreaseQuantity,
+        deleteItem,
       }}
     >
       {children}
