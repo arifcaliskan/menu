@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import CartContext from "../context/context";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { CiSquareRemove } from "react-icons/ci";
 const Cart = () => {
   const {
     cart,
@@ -45,7 +46,7 @@ const Cart = () => {
             <h3>{title}</h3>
             <p>{Math.round(price * quantity * 10) / 10} USD</p>
             <button
-              className="bg-red-500 text-white px-4 py-2 font-bold"
+              className="bg-red-500 text-white px-4 py-2 font-bold rounded-md"
               onClick={() => deleteItem(id)}
             >
               Remove From Cart
