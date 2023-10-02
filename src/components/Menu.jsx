@@ -95,13 +95,13 @@ const Menu = () => {
             >
               {title}
             </Typography>
-            <Typography
+            <p
               style={isReadMoreOpen ? null : ReadMoreStyles}
               className="text-zinc-50 pt-2 px-3 "
               variant="body1"
             >
               {desc}
-            </Typography>
+            </p>
             <button
               onClick={() => setIsReadMoreOpen(!isReadMoreOpen)}
               className="bg-gray-200 font-medium flex mx-auto text-center text-black rounded-md w-30 opacity-50"
