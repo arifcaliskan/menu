@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import CartContext from "../context/context";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { CiSquareRemove } from "react-icons/ci";
+import { CiSquareRemove, CiLink } from "react-icons/ci";
+import Navbar from "../components/Navbar";
 const Cart = () => {
   const {
     cart,
@@ -11,25 +12,23 @@ const Cart = () => {
     increaseQuantity,
     decreaseQuantity,
     deleteItem,
+    emptyCart,
+    total,
   } = useContext(CartContext);
   useEffect(() => {
     getCart();
   }, [cart]);
-  let total = 0;
-  for (const item of cart) {
-    total += item.quantity * item.price;
-    total = Math.round(total * 10) / 10;
-  }
+
   return (
     <div>
-      {cart ? (
-        <h1>Items in your Cart</h1>
+      <Navbar />
+      {cart.length ? (
+        <h1 className="w-full flex justify-center my-3 font-bold">
+          Items in your Cart
+        </h1>
       ) : (
-        <div>
+        <div className="w-full flex justify-center my-3 font-bold">
           <h1>Currently No Items in Your Cart</h1>
-          <button className="bg-amber-300 px-4 py-2 rounded-sm">
-            Shop Some Products
-          </button>
         </div>
       )}
       {cart?.map(({ title, price, img, quantity, id }) => (
@@ -72,15 +71,22 @@ const Cart = () => {
       <div className="w-screen flex flex-row justify-around">
         <button
           className="w-80 bg-amber-500 rounded-lg flex justify-center items-center"
-          onClick={() => {}}
+          onClick={() => emptyCart()}
         >
-          Empty Cart <AiFillCloseCircle className="mx-2" />
+          Empty Cart <AiFillCloseCircle size={30} className="mx-2" />
         </button>
-        <button className="bg-emerald-600 px-6 py-3 text-white rounded-lg">
-          <h2>Check-out</h2>
-          <h2 className="font-extrabold">{total}</h2>
-        </button>
+        <a href="/Checkout">
+          <button className="bg-emerald-600 px-6 py-3 text-white rounded-lg">
+            <h2>Check-out</h2>
+            <h2 className="font-extrabold">{total}</h2>
+          </button>
+        </a>
       </div>
+      <a href="/" className="w-screen flex mx-auto rounded-xl">
+        <button className="bg-slate-500 px-4 py-2 rounded-sm mx-auto mt-3 flex flex-row text-white font-bold">
+          Continue Shopping <CiLink size={30} className="mx-2" />
+        </button>
+      </a>
     </div>
   );
 };

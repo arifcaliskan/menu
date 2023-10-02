@@ -109,17 +109,6 @@ export const CartProvider = ({ children }) => {
     setMenu(selectBurger);
   };
 
-  const addToCart = async (uuid) => {
-    const selected = menu.filter((item) => item.id == uuid);
-    console.log(selected[0].title);
-    await addDoc(CartRef, {
-      uuid: selected[0].uuid,
-      title: selected[0].title,
-      price: selected[0].price,
-      img: selected[0].img,
-      quantity: 1,
-    });
-  };
   const getCart = async () => {
     try {
       const data = await getDocs(CartRef);
@@ -148,7 +137,40 @@ export const CartProvider = ({ children }) => {
   const deleteItem = async (uuid) => {
     await deleteDoc(doc(db, "cart-items", uuid));
   };
+  const emptyCart = async () => {
+    setCart();
+    await updateDoc(doc(db, "cart-items", {}));
+  };
+  const addToCart = async (uuid, title) => {
+    getCart();
+    const selected = menu.filter((item) => item.id == uuid);
+    const obj = {
+      uuid: selected[0].uuid,
+      title: selected[0].title,
+      price: selected[0].price,
+      img: selected[0].img,
+      quantity: 1,
+    };
+    console.log(cart);
+    // if (cart.includes(selected[0].id)) {
+    //   console.log("in Cart");
+    // }
+    // // const updatedQuantity = selected[0].quantity + 1;
+    // console.log(updatedQuantity);
+    // await updateDoc(doc(db, "cart-items", uuid), {
+    //   quantity: updatedQuantity,
+    // });
 
+    // console.log(selected[0]);
+    await addDoc(CartRef, obj);
+  };
+  let total = 0;
+  if (cart) {
+    for (const item of cart) {
+      total += item.quantity * item.price;
+      total = Math.round(total * 10) / 10;
+    }
+  }
   return (
     <CartContext.Provider
       value={{
@@ -167,6 +189,8 @@ export const CartProvider = ({ children }) => {
         increaseQuantity,
         decreaseQuantity,
         deleteItem,
+        emptyCart,
+        total,
       }}
     >
       {children}

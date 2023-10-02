@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-
+import React, { useContext, useEffect } from "react";
+import CartDropdown from "./CartDropdown";
 import { Alert, AlertTitle, Button, Typography } from "@mui/material";
 import { BsFillCartCheckFill } from "react-icons/bs";
 import CartContext from "../context/context";
@@ -10,12 +10,17 @@ const Menu = () => {
     menu,
     setMenu,
     getMenu,
+    getCart,
     setSelectedMenu,
     alert,
     setAlert,
     increaseOrder,
     addToCart,
   } = useContext(CartContext);
+  useEffect(() => {
+    getMenu();
+    getCart;
+  }, []);
   return (
     <div className="container mx-auto">
       {/*Category Selection*/}
@@ -55,9 +60,7 @@ const Menu = () => {
         >
           Desserts
         </Button>
-        <a href="/cart">
-          <BsFillCartCheckFill size={40} color="green" />
-        </a>
+        <CartDropdown />
       </div>
       {alert && (
         <Alert severity="success">
@@ -115,8 +118,9 @@ const Menu = () => {
               )}
               <Button
                 onClick={() => {
-                  addToCart(id);
-                  increaseOrder(id)}}
+                  addToCart(id, title);
+                  increaseOrder(id);
+                }}
                 className=""
                 variant="contained"
                 color="error"
