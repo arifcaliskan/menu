@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
-import { storage, db } from "../config/firebase";
+import React, { createContext, useState, useEffect, useRef } from "react";
+import { db } from "../config/firebase";
 import {
   collection,
   doc,
@@ -19,22 +19,17 @@ export const CartProvider = ({ children }) => {
   const [showCart, setShowCart] = useState(false);
   const CartRef = collection(db, "cart-items");
   const [cart, setCart] = useState([]);
-  // BUNU DEĞİŞTİR
-  // Get Menu from Firebase
+  const ReadMoreStyles = {
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden",
+    display: "-webkit-box",
+  };
+  const [isReadMoreOpen, setIsReadMoreOpen] = useState(false);
+  const [showReadMore, setShowReadMore] = useState(false);
+  const ref = useRef(null);
+
   const menuRef = collection(db, "menu-items");
-
-  // ***
-  // const imageRef = ref(storage, `images/`)
-
-  // useEffect(()=>{
-  //     listAll(imageRef).then((response) => {
-  //         response.items.forEach((item) => {
-  //             getDownloadURL(item).then((url) => {
-  //                 setImages((prev) => [...prev, url])
-  //             })
-  //         })
-  //     })
-  // }, [])
 
   const getMenu = async () => {
     try {
@@ -191,6 +186,12 @@ export const CartProvider = ({ children }) => {
         deleteItem,
         emptyCart,
         total,
+        ReadMoreStyles,
+        isReadMoreOpen,
+        setIsReadMoreOpen,
+        showReadMore, 
+        setShowReadMore,
+        ref,
       }}
     >
       {children}

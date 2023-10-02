@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import CartDropdown from "./CartDropdown";
 import { Alert, AlertTitle, Button, Typography } from "@mui/material";
-import { BsFillCartCheckFill } from "react-icons/bs";
 import CartContext from "../context/context";
 
 const Menu = () => {
@@ -16,10 +15,21 @@ const Menu = () => {
     setAlert,
     increaseOrder,
     addToCart,
+    ReadMoreStyles,
+    isReadMoreOpen,
+    setIsReadMoreOpen,
+    showReadMore,
+    setShowReadMore,
+    ref,
   } = useContext(CartContext);
+
   useEffect(() => {
     getMenu();
-    getCart;
+    getCart();
+    if (ref.current) {
+      // console.log(ref.current.scrollHeight, ref.current.clientHeight);
+      setShowReadMore(ref.current.scrollHeight !== ref.current.clientHeight);
+    }
   }, []);
   return (
     <div className="container mx-auto">
@@ -85,9 +95,19 @@ const Menu = () => {
             >
               {title}
             </Typography>
-            <Typography className="text-zinc-50 pt-2 px-3 " variant="body1">
+            <Typography
+              style={isReadMoreOpen ? null : ReadMoreStyles}
+              className="text-zinc-50 pt-2 px-3 "
+              variant="body1"
+            >
               {desc}
             </Typography>
+            <button
+              onClick={() => setIsReadMoreOpen(!isReadMoreOpen)}
+              className="bg-gray-200 font-medium flex mx-auto text-center text-black rounded-md w-30 opacity-50"
+            >
+              {isReadMoreOpen ? "Read Less" : "Read More..."}
+            </button>
             <div className="w-full flex justify-center py-2">
               <Typography
                 variant="h5"
@@ -98,7 +118,6 @@ const Menu = () => {
             </div>
             <div className="flex flex-row p-4 justify-around items-center bottom-0 border-t-2 border-gray-400">
               <Typography className="text-stone-200  px-2" variant="body1">
-                {" "}
                 {times} Times Ordered*
               </Typography>
               {options && (

@@ -28,17 +28,14 @@ const CartDropdown = () => {
             return (
               <div key={item.id}>
                 <Dropdown.Item href="/cart">
-                  <a
-                    href="/cart"
-                    className="flex flex-row justify-between items-center w-80"
-                  >
+                  <div className="flex flex-row justify-between items-center w-80">
                     <img src={item.img} alt="" className="w-20 h-20" />
                     <div className="flex flex-col items-center justify-start">
                       <h3>{item.title}</h3>
                       <h3>{item.price}</h3>
                     </div>
                     <h3>{item.quantity}</h3>
-                  </a>
+                  </div>
                 </Dropdown.Item>
               </div>
             );
