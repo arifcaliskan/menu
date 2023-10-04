@@ -74,10 +74,7 @@ const Menu = () => {
       </div>
       {alert && (
         <div className="w-full flex justify-end">
-          <Alert
-            className="fixed w-64 pt-[400px] bg-emerald-500"
-            severity="success"
-          >
+          <Alert className="fixed w-64 pt-[900px] z-10" severity="success">
             <AlertTitle>Success</AlertTitle>
             Added to Cart
           </Alert>
