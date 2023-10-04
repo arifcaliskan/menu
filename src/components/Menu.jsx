@@ -73,10 +73,15 @@ const Menu = () => {
         <CartDropdown />
       </div>
       {alert && (
-        <Alert severity="success">
-          <AlertTitle>Success</AlertTitle>
-          Added to Cart
-        </Alert>
+        <div className="w-full flex justify-end">
+          <Alert
+            className="fixed w-64 pt-[400px] bg-emerald-500"
+            severity="success"
+          >
+            <AlertTitle>Success</AlertTitle>
+            Added to Cart
+          </Alert>
+        </div>
       )}
       <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3">
         {menu.map(({ uuid, title, desc, price, options, img, times, id }) => (
