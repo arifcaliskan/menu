@@ -26,6 +26,8 @@ export default App;
 
 const NoMatch = () => {
   return (
-    <div className="w-full h-full flex justify-center items-center">404</div>
+    <div className="w-full h-full flex justify-center items-center text-3xl">
+      404
+    </div>
   );
 };
