@@ -89,7 +89,7 @@ const Menu = () => {
           >
             <div
               className="flex justify-center items-center bg-slate-300 w-80 h-80 bg-cover  bg-center max-w-80 max-h-80 "
-              style={{ backgroundImage: `url(${img})` }}
+              style={{ backgroundImage: `url(${../+img})` }}
             ></div>
             <Typography
               className="bg-red-700 px-2 text-white flex justify-center"
