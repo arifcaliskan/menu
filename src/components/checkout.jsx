@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar";
-import foodready from "../assets/foodready.gif";
+import foodready from "../../public/assets/foodready.gif";
 const checkout = () => {
   return (
     <div className="bg-zinc-950 ">
@@ -10,10 +10,12 @@ const checkout = () => {
           <p className="">Thank you for your Purchase.</p>
           <p className="">Your food will arrive soon.</p>
           <p>Enjoy</p>
-          <img src={foodready} className="w-96 md:w-64 mx-auto" alt="Food ready" />
-          
+          <img
+            src={foodready}
+            className="w-96 md:w-64 mx-auto"
+            alt="Food ready"
+          />
         </div>
-       
       </div>
     </div>
   );
