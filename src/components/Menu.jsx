@@ -87,12 +87,17 @@ const Menu = () => {
             className="
               mx-auto block gap-x-6  bg-emerald-800 mt-3 w-80"
           >
-            <div
+            {/* <div
               className="flex justify-center items-center bg-slate-300 w-80 h-80 bg-cover  bg-center max-w-80 max-h-80 "
               style={{
                 backgroundImage: `url(${img})`,
               }}
-            ></div>
+            ></div> */}
+            <img
+              src={img}
+              className="w-32 flex justify-center items-center"
+              alt=""
+            />
 
             <Typography
               className="bg-red-700 px-2 text-white flex justify-center"
