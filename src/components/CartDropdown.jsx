@@ -41,11 +41,11 @@ const CartDropdown = () => {
             );
           })
         ) : (
-          <Dropdown.Item href="/cart">No items in Cart</Dropdown.Item>
+          <Dropdown.Item>No items in Cart</Dropdown.Item>
         )}
         {cart.length && (
           <h2 className="w-full flex justify-center font-bold bg-amber-500 text-white text-3xl">
-            $ {total}
+            {total && total}
           </h2>
         )}
       </Dropdown.Menu>

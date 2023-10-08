@@ -141,7 +141,7 @@ const Menu = () => {
               )}
               <Button
                 onClick={() => {
-                  addToCart(id, title);
+                  addToCart(uuid, id, title);
                   increaseOrder(id);
                 }}
                 className=""

@@ -40,7 +40,9 @@ export const CartProvider = ({ children }) => {
       console.error(err);
     }
   };
-
+  useEffect(() => {
+    getCart();
+  }, [cart]);
   useEffect(() => {
     switch (selectedMenu) {
       case 0:
@@ -114,6 +116,7 @@ export const CartProvider = ({ children }) => {
     }
   };
   const increaseQuantity = async (uuid) => {
+    console.log(uuid);
     const selected = cart.filter((item) => item.id == uuid);
     const updatedQuantity = selected[0].quantity + 1;
     await updateDoc(doc(db, "cart-items", uuid), {
@@ -127,18 +130,21 @@ export const CartProvider = ({ children }) => {
       await updateDoc(doc(db, "cart-items", uuid), {
         quantity: updatedQuantity,
       });
+    } else {
+      console.log("delete from cart");
+      deleteItem(uuid);
     }
   };
   const deleteItem = async (uuid) => {
     await deleteDoc(doc(db, "cart-items", uuid));
   };
-  const emptyCart = async () => {
-    setCart();
-    await updateDoc(doc(db, "cart-items", {}));
+  const emptyCart = () => {
+    console.log("EmptyAll");
+    cart.forEach((item) => deleteDoc(doc(db, "cart-items", item.id)));
   };
-  const addToCart = async (uuid, title) => {
+  const addToCart = async (uuid, id) => {
     getCart();
-    const selected = menu.filter((item) => item.id == uuid);
+    const selected = menu.filter((item) => item.id == id);
     const obj = {
       uuid: selected[0].uuid,
       title: selected[0].title,
@@ -146,18 +152,16 @@ export const CartProvider = ({ children }) => {
       img: selected[0].img,
       quantity: 1,
     };
-    console.log(cart);
-    // if (cart.includes(selected[0].id)) {
-    //   console.log("in Cart");
-    // }
-    // // const updatedQuantity = selected[0].quantity + 1;
-    // console.log(updatedQuantity);
-    // await updateDoc(doc(db, "cart-items", uuid), {
-    //   quantity: updatedQuantity,
-    // });
 
-    // console.log(selected[0]);
-    await addDoc(CartRef, obj);
+    if (cart.find((item) => item.uuid === uuid)) {
+      const inCart = cart.find((item) => item.uuid === uuid);
+      const updatedQuantity = inCart.quantity + 1;
+      await updateDoc(doc(db, "cart-items", inCart.id), {
+        quantity: updatedQuantity,
+      });
+    } else {
+      await addDoc(CartRef, obj);
+    }
   };
   let total = 0;
   if (cart) {
@@ -189,7 +193,7 @@ export const CartProvider = ({ children }) => {
         ReadMoreStyles,
         isReadMoreOpen,
         setIsReadMoreOpen,
-        showReadMore, 
+        showReadMore,
         setShowReadMore,
         ref,
       }}
