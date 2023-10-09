@@ -75,12 +75,14 @@ const Cart = () => {
         >
           Empty Cart <AiFillCloseCircle size={30} className="mx-2" />
         </button>
-        <a href="/Checkout">
-          <button className="bg-emerald-600 px-6 py-3 text-white rounded-lg">
-            <h2>Check-out</h2>
-            <h2 className="font-extrabold">{total}</h2>
-          </button>
-        </a>
+        {cart.length && (
+          <a href="/Checkout">
+            <button className="bg-emerald-600 px-6 py-3 text-white rounded-lg">
+              <h2>Check-out</h2>
+              <h2 className="font-extrabold">{total}</h2>
+            </button>
+          </a>
+        )}
       </div>
       <a href="/" className="w-screen flex mx-auto rounded-xl">
         <button className="bg-slate-500 px-4 py-2 rounded-sm mx-auto mt-3 flex flex-row text-white font-bold">
